@@ -3,7 +3,7 @@ const Warehouse = require('../models/warehouse');
 const cities = require('./cities');
 const { places, descriptors } = require('./helpers');
 
-mongoose.connect('mongodb://localhost:27017/practicehub')
+mongoose.connect('mongodb://localhost:27017/hackathon')
 
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
