@@ -1,39 +1,38 @@
 const mongoose = require('mongoose');
 
-const technologySchema = new mongoose.Schema({
+const foodSecuritySchema = new mongoose.Schema({
   title: {
     type: String,
-    required: true,  // Ensure title is always provided
+    required: true,
   },
   description: {
     type: String,
-    required: true,  // Ensure description is always provided
+    required: true,
   },
   salientFeatures: {
-    type: [String],  // Array of strings
-    required: true,  // Ensure at least one feature is provided
+    type: [String],
+    required: true,
   },
   benefits: [String],
   cost: {
     type: String,
-    default: 'Not specified',  // Default value for cost
+    default: 'Not specified',
   },
   developer: {
     name: {
-      type: String,  // Ensure developer's name is provided
+      type: String,
     },
     organization: String,
   },
   contactDetails: {
     director: String,
-    email: {
-      type: String,
-      
-    },
+    email: String,
     address: String,
     website: String,
   },
 });
 
-const Technology = mongoose.model('Technology', technologySchema);
-module.exports = Technology;
+// ✅ This name should match your route's logic
+const FoodSecurity = mongoose.model('FoodSecurity', foodSecuritySchema);
+
+module.exports = FoodSecurity;
