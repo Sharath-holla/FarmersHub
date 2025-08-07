@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
-const Technology = require("../models/foodSecurity"); // Match this with your model file name
+const Technology = require("../models/technology"); 
 const { isLoggedIn } = require('../middleware'); // Middleware for authentication (if used)
 
 // Utility function to validate ObjectId
