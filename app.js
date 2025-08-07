@@ -23,7 +23,7 @@ const warehouseRoutes = require('./routes/warehouses');
 const userRoutes = require('./routes/users');
 const productsRoutes = require('./routes/product');
 const chathubRoutes = require('./routes/chathub');
-const foodsecurityRoutes = require('./routes/technology');
+const foodsecurityRoutes = require('./routes/foodsecurity');
 const labourRoutes = require('./routes/labours');
 
 // Initialize Express app
