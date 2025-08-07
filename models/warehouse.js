@@ -2,16 +2,25 @@ const mongoose = require('mongoose');
 const Schema=mongoose.Schema
 
 const warehouseSchema = new Schema({
-    location: {
-        type: String,
-        required: true
+    geometry: {
+        type: {
+            type: String,
+            enum: ['Point'],
+            required: true
+        },
+        coordinates: {
+            type: [Number],
+            required: true
+        }
     },
+    location: String,
     title: {
         type: String,
         required: true
     },
     image: {
-        type: String,
+        type: String, 
+        required: true,
     },
     description: {
         type: String,
@@ -30,9 +39,13 @@ const warehouseSchema = new Schema({
     },
     price: {
         type: Number,
-        min: 1000,
-        max: 20000
+        min: 0,
+        max: 5000
     },
+    availability: {
+        type: String,
+        default: true,
+      },
     author:{
         type:Schema.Types.ObjectId,
         ref:'User'

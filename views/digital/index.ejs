@@ -1,0 +1,323 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FarmersHub - Empowering Agriculture with AI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+  <style>
+    /* Base Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f4fff4;
+      color: #2e4d2e;
+      line-height: 1.6;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2rem 0;
+    }
+
+    /* Navbar */
+    .navbar {
+      background-color: #2c9c2c;
+      padding: 1rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .nav-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      color: white;
+      font-weight: 600;
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .nav-links li {
+      display: inline;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: white;
+      font-weight: 500;
+      font-size: 1rem;
+      padding: 8px 16px;
+      border-radius: 25px;
+      transition: background 0.3s, transform 0.3s;
+    }
+
+    .nav-links a:hover {
+      background-color: #1d7f1d;
+      transform: translateY(-3px);
+    }
+
+    /* Hero Section */
+    .hero-section {
+      background: linear-gradient(135deg, #d2f8d2, #a0e6a0);
+      text-align: center;
+      padding: 4rem 2rem;
+      animation: slideIn 1.5s ease-out;
+    }
+
+    .hero-title {
+      font-size: 2.5rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .highlight {
+      color: #2c9c2c;
+    }
+
+    .hero-subtitle {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      color: #345d34;
+    }
+
+    .btn {
+      background-color: #2c9c2c;
+      color: #fff;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background 0.3s ease;
+    }
+
+    .btn:hover {
+      background-color: #246d24;
+    }
+
+    /* Features Section */
+    .features-section {
+      background-color: #ffffff;
+      padding: 4rem 0;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 3rem;
+      color: #2e4d2e;
+    }
+
+    .features-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      justify-content: center;
+    }
+
+    .feature-card {
+      background-color: #f0fff0;
+      border: 1px solid #cceccc;
+      border-radius: 10px;
+      padding: 2rem;
+      width: 300px;
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+
+    .feature-card img {
+      width: 60px;
+      margin-bottom: 1rem;
+    }
+
+    .feature-card h3 {
+      color: #267026;
+      margin-bottom: 0.5rem;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-10px);
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 2rem 0;
+      background-color: #d2f8d2;
+      color: #2e4d2e;
+    }
+
+    /* Animations */
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .fade-in {
+      opacity: 0;
+      animation: fadeInUp 1s ease-out forwards;
+    }
+
+    .fade-in.delay {
+      animation-delay: 0.4s;
+    }
+
+    .fade-in.delay-2 {
+      animation-delay: 0.8s;
+    }
+
+    .fade-in.delay-3 {
+      animation-delay: 1.2s;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        transform: translateY(20px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    /* Media Queries for Responsiveness */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        gap: 1rem;
+        width: 100%;
+        align-items: center;
+      }
+
+      .nav-links.active {
+        display: flex;
+      }
+
+      .navbar {
+        position: relative;
+      }
+
+      .nav-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .logo {
+        font-size: 1.5rem;
+      }
+
+      .nav-links li {
+        text-align: center;
+      }
+
+      .menu-icon {
+        display: block;
+        cursor: pointer;
+        font-size: 1.5rem;
+        color: white;
+      }
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="logo">🌿 FarmersHub</div>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="http://localhost:5173/">AgriBot</a></li>
+        <li><a href="http://127.0.0.1:5000">Disease Detection</a></li>
+        <li><a href="http://127.0.0.1:8000">Crop Recommendation</a></li>
+        <li><a href="http://localhost:3000/quality">Product Quality Test</a></li>
+      </ul>
+      <div class="menu-icon" id="menuIcon">&#9776;</div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="hero-section">
+    <div class="container">
+      <h1 class="hero-title">🌾 Empowering Agriculture Through <span class="highlight">AI</span></h1>
+      <p class="hero-subtitle">Revolutionizing farming with intelligent, accessible, and sustainable AI solutions.</p>
+      <a href="#features" class="btn">Explore Solutions</a>
+    </div>
+  </header>
+
+  <!-- Features Section -->
+  <section id="features" class="features-section">
+    <div class="container">
+      <h2 class="section-title">Our AI-Powered Solutions</h2>
+      <div class="features-grid">
+
+        <div class="feature-card fade-in">
+          <img src="https://img.icons8.com/ios-filled/100/26e07f/chat.png" alt="Chatbot Icon"/>
+          <h3>Chatbot for Farmers</h3>
+          <p>Instant answers, expert advice. Our AI chatbot helps farmers with personalized, real-time support.</p>
+        </div>
+
+        <div class="feature-card fade-in delay">
+          <img src="https://img.icons8.com/ios-filled/100/26e07f/microscope.png" alt="Disease Detection Icon"/>
+          <h3>Crop Disease Detection</h3>
+          <p>Upload images of crops and let our model detect diseases early, ensuring timely action and healthier yields.</p>
+        </div>
+
+        <div class="feature-card fade-in delay-2">
+          <img src="https://img.icons8.com/ios-filled/100/26e07f/plant-under-rain.png" alt="Crop Recommendation Icon"/>
+          <h3>Crop Recommendation 🌱</h3>
+          <p>Suggests the best crops based on soil, weather, and region using deep learning and agronomic data.</p>
+        </div>
+
+        <div class="feature-card fade-in delay-3">
+          <img src="https://img.icons8.com/ios-filled/100/26e07f/inspection.png" alt="Product Quality Icon"/>
+          <h3>Product Quality Test 🧪</h3>
+          <p>Analyze harvested produce for quality metrics, empowering farmers to set fair, market-driven prices confidently.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>© 2025 FarmersHub | Growing smarter, together 🌾</p>
+  </footer>
+
+  <script>
+    // Toggle menu on small screens
+    document.getElementById("menuIcon").addEventListener("click", function() {
+      document.getElementById("navLinks").classList.toggle("active");
+    });
+  </script>
+</body>
+</html>

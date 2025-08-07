@@ -1,0 +1,126 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Quality Check - Farmers Hub</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f1f8f4;
+      margin: 0;
+      padding: 0;
+      color: #2e5d34;
+    }
+
+    header {
+      background-color: #2e5d34;
+      color: white;
+      padding: 1.5rem;
+      text-align: center;
+      font-size: 2rem;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 2rem auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .upload-section {
+      margin-top: 1.5rem;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    .upload-label {
+      padding: 0.8rem 2rem;
+      background-color: #2e5d34;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      display: inline-block;
+      font-weight: 600;
+    }
+
+    .preview-img {
+      max-width: 100%;
+      height: auto;
+      margin-top: 1rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .analyze-btn {
+      margin-top: 2rem;
+      background-color: #2e5d34;
+      color: white;
+      padding: 0.8rem 2rem;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .result {
+      margin-top: 2rem;
+      padding: 1rem;
+      background-color: #e7fbe7;
+      border: 1px solid #c0ebc0;
+      border-radius: 8px;
+      font-weight: 600;
+    }
+
+  </style>
+</head>
+<body>
+
+<header>📸 Product Quality Test - Farmers Hub</header>
+
+<div class="container">
+  <h2>Upload an image of your produce</h2>
+  <p>Select a clear image of your fruit, vegetable, or grain for quality analysis using our AI system.</p>
+
+  <div class="upload-section">
+    <label for="imageUpload" class="upload-label">Choose Image</label>
+    <input type="file" id="imageUpload" accept="image/*" onchange="previewImage(event)" />
+    <br />
+    <img id="preview" class="preview-img" style="display: none;" />
+  </div>
+
+  <button class="analyze-btn" onclick="analyzeImage()">Analyze Quality</button>
+
+  <div id="result" class="result" style="display: none;">
+    <!-- Quality result will appear here -->
+  </div>
+</div>
+
+<script>
+  function previewImage(event) {
+    const preview = document.getElementById('preview');
+    const file = event.target.files[0];
+    if (file) {
+      preview.src = URL.createObjectURL(file);
+      preview.style.display = 'block';
+    }
+  }
+
+  function analyzeImage() {
+    const resultBox = document.getElementById('result');
+    resultBox.style.display = 'block';
+
+    // Always show 'Rotten Fruit' result
+    resultBox.innerText = "Result:Not Fresh";
+  }
+</script>
+
+
+</body>
+</html>

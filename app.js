@@ -1,30 +1,36 @@
+// Load environment variables for non-production
 if (process.env.NODE_ENV !== "production") {
     require('dotenv').config();
 }
 
+// Required dependencies
 const express = require('express');
-const path = require('path');
 const mongoose = require('mongoose');
+const path = require('path');
 const ejsMate = require('ejs-mate');
 const session = require('express-session');
 const flash = require('connect-flash');
-const ExpressError = require('./utils/ExpressError');
 const methodOverride = require('method-override');
+const mongoSanitize = require('express-mongo-sanitize');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
+const MongoDBStore = require('connect-mongo');
+const ExpressError = require('./utils/ExpressError');
 const User = require('./models/user');
-const helmet = require('helmet');
-const mongoSanitize = require('express-mongo-sanitize');
-const MongoDBStore = require("connect-mongo");
 
-
-
-// Import routes
+// Route imports
 const warehouseRoutes = require('./routes/warehouses');
 const userRoutes = require('./routes/users');
-const ecartRoutes= require('./routes/products');
+const productsRoutes = require('./routes/product');
+const chathubRoutes = require('./routes/chathub');
+const foodsecurityRoutes = require('./routes/foodsecurity');
+const labourRoutes = require('./routes/labours');
 
-const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/hackathon';
+// Initialize Express app
+const app = express();
+
+// MongoDB Atlas connection URI
+const dbUrl = process.env.MONGO_URI || 'mongodb://localhost:27017/FarmersHub';
 
 mongoose.connect(dbUrl, {
     useNewUrlParser: true,
@@ -32,70 +38,58 @@ mongoose.connect(dbUrl, {
 });
 
 const db = mongoose.connection;
-db.on("error", console.error.bind(console, "connection error:"));
-db.once("open", () => {
-    console.log("Database connected");
+db.on('error', console.error.bind(console, '❌ MongoDB connection error:'));
+db.once('open', () => {
+    console.log('✅ MongoDB database connected');
 });
 
-const app = express();
-
+// View engine setup
 app.engine('ejs', ejsMate);
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
+// Middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(mongoSanitize({ replaceWith: '_' }));
-app.use(express.static('public'));
 
 // Session configuration
+const secret = process.env.SECRET || 'thisshouldbeabettersecret!';
 const store = MongoDBStore.create({
     mongoUrl: dbUrl,
-    secret: process.env.SECRET || 'thisshouldbeabettersecret!',
-    touchAfter: 24 * 60 * 60
+    secret,
+    touchAfter: 24 * 60 * 60 // lazy session update
 });
 
-store.on("error", function (e) {
-    console.log("SESSION STORE ERROR", e);
+store.on('error', function (e) {
+    console.log('❌ SESSION STORE ERROR:', e);
 });
 
 const sessionConfig = {
     store,
     name: 'session',
-    secret: process.env.SECRET || 'thisshouldbeabettersecret!',
+    secret,
     resave: false,
     saveUninitialized: true,
     cookie: {
         httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
         expires: Date.now() + 1000 * 60 * 60 * 24 * 7, // 7 days
-        maxAge: 1000 * 60 * 60 * 24 * 7 // 7 days
+        maxAge: 1000 * 60 * 60 * 24 * 7
     }
 };
-
 app.use(session(sessionConfig));
 app.use(flash());
-app.use(helmet());
 
+// Passport authentication
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-// Security headers for content security
-app.use(helmet.contentSecurityPolicy({
-    directives: {
-        defaultSrc: ["'self'"],
-        scriptSrc: ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net"],
-        styleSrc: ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net"],
-        imgSrc: ["'self'", "data:", "https://res.cloudinary.com"], // Cloudinary
-        connectSrc: ["'self'"],
-        fontSrc: ["'self'", "https://fonts.gstatic.com"],
-    }
-}));
-
-// Flash messages and current user middleware
+// Flash + user middleware
 app.use((req, res, next) => {
     res.locals.currentUser = req.user;
     res.locals.success = req.flash('success');
@@ -106,26 +100,39 @@ app.use((req, res, next) => {
 // Routes
 app.use('/', userRoutes);
 app.use('/warehouses', warehouseRoutes);
-app.use('/products',ecartRoutes);
+app.use('/foodsecurity', foodsecurityRoutes);
+app.use('/products', productsRoutes);
+app.use('/chathub', chathubRoutes);
+app.use('/labours', labourRoutes);
 
-// Home route
+// Static pages
 app.get('/', (req, res) => {
     res.render('home');
 });
+app.get('/quality', (req, res) => {
+    res.render('quality');
+});
+app.get('/digital', (req, res) => {
+    res.render("digital/index");
+});
+app.get('/awareness', (req, res) => {
+    res.render("awareness/index");
+});
 
-// Error handling for undefined routes
+// Catch-all for 404s
 app.all('*', (req, res, next) => {
     next(new ExpressError('Page Not Found', 404));
 });
 
-// Error handling middleware
+// Global error handler
 app.use((err, req, res, next) => {
     const { statusCode = 500 } = err;
-    if (!err.message) err.message = 'Oh No, Something Went Wrong!';
+    if (!err.message) err.message = 'Something went wrong!';
     res.status(statusCode).render('error', { err });
 });
 
+// Start server
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
-    console.log(`Serving on port ${port}`);
+    console.log(`🚀 Server running on port ${port}`);
 });

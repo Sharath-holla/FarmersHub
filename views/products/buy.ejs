@@ -1,0 +1,40 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="container my-5">
+    <h1 class="text-center text-success mb-4">Buy Product</h1>
+
+    <div class="card p-4 shadow border-0">
+        <h3 class="text-primary mb-3"><%= product.name %></h3>
+        <p><strong>Price:</strong> ₹<%= product.price %></p>
+
+        <form action="/products/buy/<%= product._id %>" method="POST">
+            <div class="mb-3">
+                <label for="name" class="form-label">Full Name</label>
+                <input type="text" class="form-control" name="name" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="area" class="form-label">Area</label>
+                <input type="text" class="form-control" name="area" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="location" class="form-label">Location/City</label>
+                <input type="text" class="form-control" name="location" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="phone" class="form-label">Phone Number</label>
+                <input type="tel" class="form-control" name="phone" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Payment</label>
+                <p>Click the button below to complete your payment:</p>
+                <a href="https://drive.google.com/file/d/16iN39nJHDMa_E-CqymUfpqZnY_BHSAZ4/view?usp=sharing" target="_blank" class="btn btn-outline-primary mb-2">Pay with Qr code</a>
+            </div>
+
+            <button type="submit" class="btn btn-success">Confirm Purchase</button>
+        </form>
+    </div>
+</div>

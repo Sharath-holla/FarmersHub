@@ -1,58 +1,92 @@
 <% layout('layouts/boilerplate') %>
 <link rel="stylesheet" href="/stylesheets/stars.css">
-<div class="row">
-    <div class="col-6">
-        <% if (warehouse.images && warehouse.images.length) { %>
-        <div id="warehouseCarousel" class="carousel slide" data-ride="carousel">
-            <div class="carousel-inner">
-                <% warehouse.images.forEach((img, i) => { %>
-                <div class="carousel-item <%= i === 0 ? 'active' : '' %>">
-                    <img src="<%= img.url %>" class="d-block w-100" alt="<%= warehouse.title %>">
-                </div>
-                <% }) %>
-            </div>
-            <% if (warehouse.images.length > 1) { %>
-            <a class="carousel-control-prev" href="#warehouseCarousel" role="button" data-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="sr-only">Previous</span>
-            </a>
-            <a class="carousel-control-next" href="#warehouseCarousel" role="button" data-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="sr-only">Next</span>
-            </a>
-            <% } %>
-        </div>
-        <% } else { %>
-        <div class="alert alert-info text-center">No images available for this warehouse.</div>
-        <% } %>
-        <div class="card mb-3">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+<!-- Map Section (Adjusted size with border) -->
+<div class="col-12 mt-4">
+    <div id="map" style="height: 300px;width: 1200px; border: 2px solid #ccc; border-radius: 8px;"></div>
+</div>
+
+<div class="row mt-5">
+    <!-- Warehouse Details Section -->
+    <div class="col-lg-6">
+        <div class="card mb-3 shadow-lg border-light">
             <div class="card-body">
-                <h5 class="card-title"><%= warehouse.title %></h5>
-                <p class="card-text"><%= warehouse.description %></p>
+                <h3 class="card-title text-primary"><%= warehouse.title %></h3>
+                <p class="card-text text-muted"><%= warehouse.description %></p>
             </div>
             <ul class="list-group list-group-flush">
-                <li class="list-group-item text-muted">Location: <%= warehouse.location %></li>
-                <li class="list-group-item">Goods Stored: <%= warehouse.goodsStored %></li>
-                <li class="list-group-item">Storage Capacity: <%= warehouse.storageCapacity %> tons</li>
-                <li class="list-group-item">Type: <%= warehouse.type %></li>
-                <li class="list-group-item">Price: ₹<%= warehouse.price %></li>
+                <li class="list-group-item text-muted"><strong>Location:</strong> <%= warehouse.location %></li>
+                <li class="list-group-item"><strong>Goods Stored:</strong> <%= warehouse.goodsStored %></li>
+                <li class="list-group-item"><strong>Storage Capacity:</strong> <%= warehouse.storageCapacity %> tons</li>
+                <li class="list-group-item"><strong>Type:</strong> <%= warehouse.type %></li>
+                <li class="list-group-item"><strong>Price:</strong> ₹<%= warehouse.price %></li>
+                <li class="list-group-item"><strong>Availability:</strong> <%= warehouse.availability ? 'Available' : 'Not Available' %></li>
             </ul>
             <% if (currentUser && warehouse.author && warehouse.author.equals(currentUser._id)) { %>
-            <div class="card-body">
-                <a href="/warehouses/<%= warehouse._id %>/edit" class="btn btn-secondary">Edit</a>
-                <form action="/warehouses/<%= warehouse._id %>?_method=DELETE" method="POST" class="d-inline">
+            <div class="card-body d-flex justify-content-between">
+                <a class="btn btn-warning" href="/warehouses/<%= warehouse._id %>/edit">Edit</a>
+                <form class="d-inline" action="/warehouses/<%= warehouse._id %>?_method=DELETE" method="POST">
                     <button class="btn btn-danger">Delete</button>
                 </form>
             </div>
             <% } %>
-            <div class="card-footer text-muted">
-                Last updated 
-                <% if (warehouse.updatedAt) { %>
-                    <%= warehouse.updatedAt.toLocaleString() %>
-                <% } else { %>
-                    Not available
-                <% } %>
+            <div class="card-footer text-muted d-flex justify-content-between align-items-center">
+                <small>
+                    Last updated: 
+                    <% if (warehouse.updatedAt) { %>
+                        <%= new Date(warehouse.updatedAt).toLocaleString() %>
+                    <% } else { %>
+                        Not available
+                    <% } %>
+                </small>
+                <a href="/warehouses" class="btn btn-secondary">Back to Warehouses</a>
+                <a href="/warehouses/<%= warehouse._id %>/book" class="btn btn-primary">Book This Warehouse</a>
             </div>
         </div>
     </div>
+
+    <!-- Image Section with Border -->
+    <div class="col-lg-6">
+        <% if (warehouse.image) { %>
+            <img src="<%= warehouse.image %>" class="img-fluid rounded-start border" style="height: 75%; object-fit: cover;" alt="<%= warehouse.title %>">
+        <% } else { %>
+            <img src="https://via.placeholder.com/300x200.png?text=No+Image+Available"
+                 class="img-fluid rounded-start border" style="height: 75%; object-fit: cover;" alt="No Image Available">
+        <% } %>
+    </div>
 </div>
+
+    
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+const maptilerApiKey = '<%- process.env.MAPTILER_API_KEY %>';
+const warehouseLocation = <%- JSON.stringify(warehouse.geometry.coordinates) %>; // Extract the correct coordinates
+
+// Ensure the coordinates are in the form [longitude, latitude]
+const longitude = warehouseLocation[0];
+const latitude = warehouseLocation[1];
+
+// Initialize the MapTiler map
+maptilersdk.config.apiKey = maptilerApiKey;
+
+const map = new maptilersdk.Map({
+    container: 'map',
+    style: maptilersdk.MapStyle.BRIGHT,
+    center: [longitude, latitude],  // Center the map based on warehouse coordinates
+    zoom: 10  // Adjust zoom level as necessary
+});
+
+// Add a marker for the warehouse location
+new maptilersdk.Marker()
+    .setLngLat([longitude, latitude])
+    .setPopup(
+        new maptilersdk.Popup({ offset: 25 })
+            .setHTML(
+                `<h3>${'<%= warehouse.title %>'}</h3><p>${'<%= warehouse.location %>'}</p>`
+            )
+    )
+    .addTo(map);
+</script>
