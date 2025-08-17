@@ -213,6 +213,37 @@
     margin-bottom: 1rem;
 }
 
+    /* Responsive Design */
+    @media (max-width: 900px) {
+      .nav-links {
+        display: none;
+      }
+
+      .hamburger {
+        display: block;
+      }
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideDown {
+      from {
+        transform: translateY(-100%);
+      }
+      to {
+        transform: translateY(0);
+      }
+    }
 /* Our Impact Section */
 .impact {
     padding: 4rem 2rem;
@@ -234,6 +265,53 @@
     line-height: 1.8;
     text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
 }
+  /* Hamburger Menu */
+  .hamburger {
+  display: none;
+  font-size: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+@media (max-width: 900px) {
+  .nav-links {
+    display: none;
+  }
+  .hamburger {
+    display: block;
+    color: #333;
+  }
+}
+ .mobile-menu {
+  display: none;
+  flex-direction: column;
+  background: #fff;
+  position: absolute;
+  top: 60px; /* below navbar */
+  right: 20px;
+  width: 200px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  padding: 10px;
+  z-index: 1000;
+}
+
+.mobile-menu a {
+  padding: 10px;
+  text-decoration: none;
+  color: #333;
+  border-bottom: 1px solid #eee;
+}
+
+.mobile-menu a:last-child {
+  border-bottom: none;
+}
+
+.mobile-menu.show {
+  display: flex; /* show on toggle */
+}
+
 
 /* FAQs Section */
 .faqs {
@@ -339,9 +417,7 @@ details p {
     margin-top: 1rem;
     font-size: 0.9rem;
 }
-
-
-        /* Animations */
+  /* Animations */
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -387,22 +463,43 @@ details p {
 
 <body>
     <!-- Header Section -->
-    <header>
-        <nav>
-            <h1 class="logo">Farmers Hub</h1>
-            <div class="nav-links">
-                <a href="/digital">Digital Solutions</a>
-                <a href="/foodsecurity">Food Technology</a>
-                <a href="/products">Shopping</a>
-                <a href="/warehouses">Warehouses</a>
-                <a href="/chathub">chatHub</a>
-               <a href="/awareness">Awarenes platform</a>
-               <a href="/labours">Labours Hub</a>
-                <a href="/login">Login</a>
-                <a href="/register">Register</a>
-            </div>
-        </nav>
-    </header>
+   <header>
+    <nav>
+      <h1 class="logo">Farmers Hub</h1>
+
+      <!-- Desktop Nav -->
+      <div class="nav-links">
+        <a href="/warehouses">Warehouses</a>
+        <a href="/foodsecurity">Food Technology</a>
+        <a href="/products">Shopping</a>
+        <a href="/digital">Digital Solutions</a>
+        <a href="/chathub">chatHub</a>
+        <a href="/awareness">Awareness</a>
+        <a href="/labours">Labours Hub</a>
+        <a href="/login">Login</a>
+        <a href="/register">Register</a>
+      </div>
+
+      <!-- Hamburger -->
+      <button class="hamburger" onclick="toggleMenu()">
+        <i class="fas fa-bars"></i>
+      </button>
+
+      <!-- Mobile Menu -->
+      <div class="mobile-menu" id="mobileMenu">
+        <a href="/warehouses">Warehouses</a>
+        <a href="/foodsecurity">Food Technology</a>
+        <a href="/products">Shopping</a>
+        <a href="/warehouses">Warehouses</a>
+        <a href="/digital">Digital Solutions</a>
+        <a href="/chathub">chatHub</a>
+        <a href="/awareness">Awareness</a>
+        <a href="/labours">Labours Hub</a>
+        <a href="/login">Login</a>
+        <a href="/register">Register</a>
+      </div>
+    </nav>
+  </header>
 
     <!-- Hero Section -->
     <section class="hero">
@@ -525,3 +622,12 @@ details p {
 </body>
 
 </html>
+
+<script>
+  const hamburger = document.querySelector(".hamburger");
+  const mobileMenu = document.querySelector(".mobile-menu");
+
+  hamburger.addEventListener("click", () => {
+    mobileMenu.classList.toggle("show");
+  });
+</script>

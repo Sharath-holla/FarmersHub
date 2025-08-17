@@ -41,7 +41,7 @@ router.get("/", asyncWrap(async (req, res) => {
 }));
 
 // Route: New form
-router.get("/new", isLoggedIn, (req, res) => {
+router.get("/new", (req, res) => {
     res.render("foodsecurity/new");
 });
 
