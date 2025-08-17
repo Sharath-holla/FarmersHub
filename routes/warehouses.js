@@ -36,13 +36,13 @@ router.get("/search", async (req, res) => {
 });
 
 // Route to show form to create a new warehouse
-router.get('/new', isLoggedIn, warehouses.renderNewForm);
+router.get('/new', warehouses.renderNewForm);
 
 // Routes for a specific warehouse by ID
 router.route('/:id')
     .get(catchAsync(warehouses.showWarehouse)) // Show specific warehouse
-    .put(isLoggedIn, isWarehouseOwner, validateWarehouse, catchAsync(warehouses.updateWarehouse)) // Update warehouse
-    .delete(isLoggedIn, isWarehouseOwner, catchAsync(warehouses.deleteWarehouse)); // Delete warehouse
+    .put(isWarehouseOwner, validateWarehouse, catchAsync(warehouses.updateWarehouse)) // Update warehouse
+    .delete(isWarehouseOwner, catchAsync(warehouses.deleteWarehouse)); // Delete warehouse
 
 
     router.get('/:id/book', async (req, res) => {
